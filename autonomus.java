@@ -29,10 +29,8 @@
 package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import org.firstinspires.ftc.teamcode.BasicOpMode_Linear;
 /**
  * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
  * the autonomous or the teleop period of an FTC match. The names of OpModes appear on the menu
@@ -81,14 +79,29 @@ public class autonomus extends LinearOpMode {
         frontleft.setDirection(DcMotor.Direction.FORWARD);
         frontright.setDirection(DcMotor.Direction.FORWARD);
         // Wait for the game to start (driver presses PLAY)
+        // Set the drive motor run modes:
+        // "RUN_USING_ENCODER" causes the motor to try to run at the specified fraction of full velocity
+        // Note: We were not able to make this run mode work until we switched Channel A and B encoder wiring into
+        // the motor controllers. (Neverest Channel A connects to MR Channel B input, and vice versa.)
+        frontleft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontright.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backleft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backright.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        telemetry.addData("Front Left:", frontleft.getCurrentPosition());
+        telemetry.addData("Front Right:", frontright.getCurrentPosition());
+        telemetry.addData("Back Left:", backleft.getCurrentPosition());
+        telemetry.addData("Back Right:", backright.getCurrentPosition());
+        telemetry.update();
+
         waitForStart();
         runtime.reset();
         // run until the end of the match (driver presses STOP)
         double start_time = runtime.time();
         double current_time = start_time;
-        telemetry.addData("1: start Time", String.valueOf(start_time));
-        telemetry.addData("1: current_time", String.valueOf(current_time));
-        telemetry.update();
+        //telemetry.addData("1: start Time", String.valueOf(start_time));
+        //telemetry.addData("1: current_time", String.valueOf(current_time));
+        //telemetry.update();
         // Move the robot
         BasicOpMode_Linear linear = new BasicOpMode_Linear();
         movement1(1, -1, 1, -1);
@@ -138,10 +151,14 @@ public class autonomus extends LinearOpMode {
         backleft.setPower(LR);
         backright.setPower(RR);
 
-        sleep(1000);
+        for(int i = 0; i<10; i++) {
+            telemetry.addData("Front Left:", frontleft.getCurrentPosition());
+            telemetry.addData("Front Right:", frontright.getCurrentPosition());
+            telemetry.addData("Back Left:", backleft.getCurrentPosition());
+            telemetry.addData("Back Right:", backright.getCurrentPosition());
+            telemetry.update();
+            sleep(500);
+        }
     }
 }
-
-
-
 
